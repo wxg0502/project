@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.system.mapper.dental.DentalAilmentMapper">
+    
+    <resultMap type="DentalAilment" id="DentalAilmentResult">
+        <result property="id"    column="id"    />
+        <result property="clinicid"    column="clinicid"    />
+        <result property="spendTime"    column="spend_time"    />
+        <result property="ailmentName"    column="ailment_name"    />
+        <result property="imgUrl"    column="img_url"    />
+        <result property="ailmentExplain"    column="ailmentExplain"    />
+        <result property="alimentSolution"    column="aliment_solution"  />
+        <result property="ailment_type"    column="ailmentType" />
+        <result property="spare"    column="spare"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectDentalAilmentVo">
+        select id, clinicid, spend_time, ailment_name, img_url, aliment_solution, spare, ailmentExplain,remark from dental_ailment
+    </sql>
+	
+    <select id="selectDentalAilmentList" parameterType="DentalAilment" resultMap="DentalAilmentResult">
+        <include refid="selectDentalAilmentVo"/>
+        <where>  
+            <if test="id != null  and id != '' "> and id = #{id}</if>
+             <if test="clinicid != null  and clinicid != '' "> and clinicid = #{clinicid}</if>
+             <if test="spendTime != null "> and spend_time = #{spendTime}</if>
+             <if test="ailmentName != null  and ailmentName != '' "> and ailment_name = #{ailmentName}</if>
+             <if test="ailmentExplain != null  and ailmentExplain != '' "> and ailmentExplain = #{ailmentExplain}</if>
+             <if test="imgUrl != null  and imgUrl != '' "> and img_url = #{imgUrl}</if>
+             <if test="alimentSolution != null  and alimentSolution != '' "> and aliment_solution = #{alimentSolution}</if>
+             <if test="spare != null  and spare != '' "> and spare = #{spare}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectDentalAilmentById" parameterType="String" resultMap="DentalAilmentResult">
+        <include refid="selectDentalAilmentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDentalAilment" parameterType="DentalAilment">
+        insert into dental_ailment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">id,</if>
+			<if test="clinicid != null  and clinicid != ''  ">clinicid,</if>
+			<if test="spendTime != null  ">spend_time,</if>
+			<if test="ailmentName != null  and ailmentName != ''  ">ailment_name,</if>
+			<if test="ailmentType != null  and ailmentType != ''  ">ailmentType,</if>
+			<if test="ailmentExplain != null  and ailmentExplain != ''  ">ailmentExplain,</if>
+			<if test="imgUrl != null  and imgUrl != ''  ">img_url,</if>
+			<if test="alimentSolution != null  and alimentSolution != ''  ">aliment_solution,</if>
+			<if test="spare != null  and spare != ''  ">spare,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">#{id},</if>
+			<if test="clinicid != null  and clinicid != ''  ">#{clinicid},</if>
+			<if test="spendTime != null  ">#{spendTime},</if>
+			<if test="ailmentName != null  and ailmentName != ''  ">#{ailmentName},</if>
+			<if test="ailmentType != null  and ailmentType != ''  ">#{ailmentType},</if>
+			<if test="ailmentExplain != null  and ailmentExplain != ''  ">#{ailmentExplain},</if>
+			<if test="imgUrl != null  and imgUrl != ''  ">#{imgUrl},</if>
+			<if test="alimentSolution != null  and alimentSolution != ''  ">#{alimentSolution},</if>
+			<if test="spare != null  and spare != ''  ">#{spare},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDentalAilment" parameterType="DentalAilment">
+        update dental_ailment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="clinicid != null  and clinicid != ''  ">clinicid = #{clinicid},</if>
+            <if test="spendTime != null  ">spend_time = #{spendTime},</if>
+            <if test="ailmentName != null  and ailmentName != ''  ">ailment_name = #{ailmentName},</if>  
+             <if test="ailmentType != null  and ailmentType != ''  ">ailment_type = #{ailmentType},</if>            
+            <if test="ailmentExplain != null  and ailmentExplain != ''  ">ailmentExplain = #{ailmentExplain},</if>
+            <if test="imgUrl != null  and imgUrl != ''  ">img_url = #{imgUrl},</if>
+            <if test="alimentSolution != null  and alimentSolution != ''  ">aliment_solution = #{alimentSolution},</if>
+            <if test="spare != null  and spare != ''  ">spare = #{spare},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteDentalAilmentById" parameterType="String">
+        delete from dental_ailment where id = #{id}
+    </delete>
+	
+    <delete id="deleteDentalAilmentByIds" parameterType="String">
+        delete from dental_ailment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

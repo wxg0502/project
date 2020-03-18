@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.system.mapper.dental.DentalWorkMapper">
+    
+    <resultMap type="DentalWork" id="DentalWorkResult">
+        <result property="id"    column="id"    />
+        <result property="doctorId"    column="doctor_id"    />
+        <result property="workDate"    column="work_date"    />
+        <result property="workStatus"    column="work_status"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectDentalWorkVo">
+        select id, doctor_id, work_date, work_status, remark from dental_work
+    </sql>
+	
+    <select id="selectDentalWorkList" parameterType="DentalWork" resultMap="DentalWorkResult">
+        <include refid="selectDentalWorkVo"/>
+        <where>  
+            <if test="id != null  and id != '' "> and id = #{id}</if>
+             <if test="doctorId != null  and doctorId != '' "> and doctor_id = #{doctorId}</if>
+             <if test="workDate != null "> and work_date = #{workDate}</if>
+             <if test="workStatus != null  and workStatus != '' "> and work_status = #{workStatus}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectDentalWorkById" parameterType="String" resultMap="DentalWorkResult">
+        <include refid="selectDentalWorkVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDentalWork" parameterType="DentalWork">
+        insert into dental_work
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">id,</if>
+			<if test="doctorId != null  and doctorId != ''  ">doctor_id,</if>
+			<if test="workDate != null  ">work_date,</if>
+			<if test="workStatus != null  and workStatus != ''  ">work_status,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">#{id},</if>
+			<if test="doctorId != null  and doctorId != ''  ">#{doctorId},</if>
+			<if test="workDate != null  ">#{workDate},</if>
+			<if test="workStatus != null  and workStatus != ''  ">#{workStatus},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDentalWork" parameterType="DentalWork">
+        update dental_work
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="doctorId != null  and doctorId != ''  ">doctor_id = #{doctorId},</if>
+            <if test="workDate != null  ">work_date = #{workDate},</if>
+            <if test="workStatus != null  and workStatus != ''  ">work_status = #{workStatus},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteDentalWorkById" parameterType="String">
+        delete from dental_work where id = #{id}
+    </delete>
+	
+    <delete id="deleteDentalWorkByIds" parameterType="String">
+        delete from dental_work where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

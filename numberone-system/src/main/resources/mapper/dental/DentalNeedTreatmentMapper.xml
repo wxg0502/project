@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.system.mapper.dental.DentalNeedTreatmentMapper">
+    
+    <resultMap type="DentalNeedTreatment" id="DentalNeedTreatmentResult">
+        <result property="id"    column="id"    />
+        <result property="patientId"    column="patient_id"    />
+        <result property="treatmentItems"    column="treatment_items"    />
+        <result property="treatmentSolution"    column="treatment_solution"    />
+        <result property="doctorAdvice"    column="doctor_advice"    />
+        <result property="checkResult"    column="check_result"    />
+        <result property="checkTime"    column="check_time"    />
+        <result property="isShow"    column="is_show"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectDentalNeedTreatmentVo">
+        select id, patient_id, treatment_items, treatment_solution, doctor_advice, check_result, check_time, is_show, update_date, remark from dental_need_treatment
+    </sql>
+	
+    <select id="selectDentalNeedTreatmentList" parameterType="DentalNeedTreatment" resultMap="DentalNeedTreatmentResult">
+        <include refid="selectDentalNeedTreatmentVo"/>
+        <where>  
+            <if test="id != null  and id != '' "> and id = #{id}</if>
+             <if test="patientId != null  and patientId != '' "> and patient_id = #{patientId}</if>
+             <if test="treatmentItems != null  and treatmentItems != '' "> and treatment_items = #{treatmentItems}</if>
+             <if test="treatmentSolution != null  and treatmentSolution != '' "> and treatment_solution = #{treatmentSolution}</if>
+             <if test="doctorAdvice != null  and doctorAdvice != '' "> and doctor_advice = #{doctorAdvice}</if>
+             <if test="checkResult != null  and checkResult != '' "> and check_result = #{checkResult}</if>
+             <if test="checkTime != null "> and check_time = #{checkTime}</if>
+             <if test="isShow != null  and isShow != '' "> and is_show = #{isShow}</if>
+             <if test="updateDate != null "> and update_date = #{updateDate}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectDentalNeedTreatmentById" parameterType="String" resultMap="DentalNeedTreatmentResult">
+        <include refid="selectDentalNeedTreatmentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDentalNeedTreatment" parameterType="DentalNeedTreatment">
+        insert into dental_need_treatment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">id,</if>
+			<if test="patientId != null  and patientId != ''  ">patient_id,</if>
+			<if test="treatmentItems != null  and treatmentItems != ''  ">treatment_items,</if>
+			<if test="treatmentSolution != null  and treatmentSolution != ''  ">treatment_solution,</if>
+			<if test="doctorAdvice != null  and doctorAdvice != ''  ">doctor_advice,</if>
+			<if test="checkResult != null  and checkResult != ''  ">check_result,</if>
+			<if test="checkTime != null  ">check_time,</if>
+			<if test="isShow != null  and isShow != ''  ">is_show,</if>
+			<if test="updateDate != null  ">update_date,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  and id != ''  ">#{id},</if>
+			<if test="patientId != null  and patientId != ''  ">#{patientId},</if>
+			<if test="treatmentItems != null  and treatmentItems != ''  ">#{treatmentItems},</if>
+			<if test="treatmentSolution != null  and treatmentSolution != ''  ">#{treatmentSolution},</if>
+			<if test="doctorAdvice != null  and doctorAdvice != ''  ">#{doctorAdvice},</if>
+			<if test="checkResult != null  and checkResult != ''  ">#{checkResult},</if>
+			<if test="checkTime != null  ">#{checkTime},</if>
+			<if test="isShow != null  and isShow != ''  ">#{isShow},</if>
+			<if test="updateDate != null  ">#{updateDate},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDentalNeedTreatment" parameterType="DentalNeedTreatment">
+        update dental_need_treatment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="patientId != null  and patientId != ''  ">patient_id = #{patientId},</if>
+            <if test="treatmentItems != null  and treatmentItems != ''  ">treatment_items = #{treatmentItems},</if>
+            <if test="treatmentSolution != null  and treatmentSolution != ''  ">treatment_solution = #{treatmentSolution},</if>
+            <if test="doctorAdvice != null  and doctorAdvice != ''  ">doctor_advice = #{doctorAdvice},</if>
+            <if test="checkResult != null  and checkResult != ''  ">check_result = #{checkResult},</if>
+            <if test="checkTime != null  ">check_time = #{checkTime},</if>
+            <if test="isShow != null  and isShow != ''  ">is_show = #{isShow},</if>
+            <if test="updateDate != null  ">update_date = #{updateDate},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteDentalNeedTreatmentById" parameterType="String">
+        delete from dental_need_treatment where id = #{id}
+    </delete>
+	
+    <delete id="deleteDentalNeedTreatmentByIds" parameterType="String">
+        delete from dental_need_treatment where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

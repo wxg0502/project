@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+    <title>NumberOne介绍</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="../static/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" rel="stylesheet"/>
+    <link href="../static/css/bootstrap-table.min.css" th:href="@{/css/bootstrap-table.min.css}" rel="stylesheet"/>
+    <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
+    <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/js/bootstrap-table-zh-CN.js}"></script>
+    
+</head>
+<body class="gray-bg">
+<div class="col-sm-12 select-table table-striped">
+     <table id="table"></table>
+</div>
+<script th:inline="javascript"> var ctx = [[@{/}]];
+
+
+var captchaType = [[${captchaType}]]; </script>
+<script type="text/javascript">
+
+
+var url = ctx + 'system/user/profile/mergeCellData';
+//alert(url)
+$(function () {  initTable()});
+/**
+ * 初始化 table 数据
+ */
+function initTable() {
+ $('#table').bootstrapTable('destroy');
+ $("#table").bootstrapTable({
+     dataType: "json",
+     method: 'post',
+     contentType: "application/x-www-form-urlencoded",
+     cache: false,
+     url:url,
+     /* data:[
+           {"physicalTestId.year":"qqq","physicalTestId.name":"10","people.name":"777","people.sex":"10","people.unit.name":"29%","age":"45","people.position":"777","isReplace":"78","testResult":"2323"},         
+           {"physicalTestId.year":"qqq","physicalTestId.name":"10","people.name":"777","people.sex":"10","people.unit.name":"29%","age":"45","people.position":"777","isReplace":"78","testResult":"2323"}
+           ], */
+/*      columns:[
+
+         [
+             {
+                 "title": "洗衣机统计表",
+                 "halign":"center",
+                 "align":"center",
+                 "colspan": 5
+             }
+         ],
+         [
+             {
+                 field: 'name',
+                 title: "功能分组",
+                 valign:"middle",
+                 align:"center",
+                 colspan: 1,
+                 rowspan: 2
+             },
+             {
+                 title: "美的",
+                 valign:"middle",
+                 align:"center",
+                 colspan: 2,
+                 rowspan: 1
+             },
+             {
+                 title: "松下",
+                 valign:"middle",
+                 align:"center",
+                 colspan: 2,
+                 rowspan: 1
+             }
+         ],
+         [
+             {
+                 field: 'mideaNum',
+                 title: '数量',
+                 valign:"middle",
+                 align:"center"
+             },
+             {
+                 field: 'mideaPercent',
+                 title: '占比',
+                 valign:"middle",
+                 align:"center"
+             },
+             {
+                 field: 'panasonicNum',
+                 title: '数量',
+                 valign:"middle",
+                 align:"center"
+             },
+             {
+                 field: 'panasonicPercent',
+                 title: '占比',
+                 valign:"middle",
+                 align:"center"
+             }
+         ]
+     ],
+     onLoadSuccess : function(data) {                                
+         var data = $('#table').bootstrapTable('getData', true);
+         //合并单元格
+         mergeCells(data, "name", 1, $('#table'));
+
+}, */
+           onClickRow: function(row, $el){
+           },
+           columns: [
+          [
+			{
+			    title: '<font size="3" color="red">某某口腔诊所</font>',
+			    colspan: 9,
+			        //rowspan: 1,
+			        valign:"middle",
+			    align:"center"
+			}
+           
+           ],    
+           [
+			{
+			    title: '今日（2020年3月1日）就诊患者列表',
+			    colspan: 9,
+			        //rowspan: 1,
+			        valign:"middle",
+			    align:"center"
+			}
+           ],  
+          [
+           {
+	        field: 'physicalTestId_year',
+	        title: '就诊时间',
+	        //colspan: 1,
+		       // rowspan: 2,
+	        sortable: true		       
+	    }
+		,{
+	        field: 'physicalTestId_name',
+	        title: '接诊医师',
+	        //colspan: 1,
+		       // rowspan: 2,
+	        sortable: true    
+	    }
+		,{
+	        field: 'people_name',
+	        title: '患者',
+	        //colspan: 1,
+		        //rowspan: 2,
+	        sortable: true
+	       
+	    }
+		,{
+	        field: '待诊号',
+	        title: '性别',
+	      //  colspan: 1,
+		       // rowspan: 2,
+	        sortable: true,
+	        formatter:function(value, row , index){
+	        	
+	        	//alert()
+	        	//return jp.getDictLabel(${fns:toJson(fns:getDictList('sex'))}, value, "-");
+	        }
+	    }
+		,{
+	        field: 'age',
+	        title: '诊疗进程',
+	       // colspan: 1,
+		      //  rowspan: 2,
+	        sortable: true
+	       
+	    }
+		,{
+	        field: 'people_unit_name',
+	        title: '诊疗内容',
+	        //: 1,
+		   //   //  rowspan: 2,
+	        sortable: true
+	       
+	    }
+		,{
+	        field: 'people_position',
+	        title: '诊疗状态',
+	        //colspan: 1,
+		      //  rowspan: 2,
+	        sortable: true
+	       
+	    }
+		,{
+	        field: 'people_position',
+	        title: '诊疗费用',
+	        //colspan: 1,
+		      //  rowspan: 2,
+	        sortable: true
+	       
+	    }
+		,{
+	        field: 'people_position',
+	        title: '操作',
+	        //colspan: 1,
+		      //  rowspan: 2,
+	        sortable: true,
+            formatter:function(value, row , index){
+            	if(index==1){
+            	return ' <input type="checkbox" name="favorite" value="1" />现在叫号&nbsp;&nbsp;&nbsp;<input type="checkbox" name="favorite" value="2" />已叫号';	
+            		
+            	}else if(index==2){
+            		return ' <input type="checkbox" name="favorite" value="1" />电话提醒&nbsp;&nbsp;&nbsp;<input type="checkbox" name="favorite" value="2" />已提醒&nbsp;&nbsp;&nbsp;<input type="checkbox" name="favorite" value="3" />取消预约';
+            	}else{
+	        	return  "<a href='/'>查看诊疗费用详情</a>";
+            		
+            	}
+	        	
+	        	//return jp.getDictLabel(${fns:toJson(fns:getDictList('sex'))}, value, "-");
+	        }
+	       
+	    }
+	     ],
+	 
+           ],
+           onLoadSuccess : function(data) {      
+        	   //alert("加载成功")
+        	   console.info(data)
+        	   var data = $('#table').bootstrapTable('getData', true);
+        	                      // 合并单元格
+        	   var fieldList=["physicalTestId_year"];
+        	                      mergeCells(data, "physicalTestId_year", 1, $('#table'),fieldList);      
+        	   }
+
+ })
+}
+
+
+/**
+ * 合并单元格
+ * 
+ * @param data
+ *            原始数据（在服务端完成排序）
+ * @param fieldName
+ *            合并参照的属性名称
+ * @param colspan
+ *            合并开始列
+ * @param target
+ *            目标表格对象	 
+ * @param fieldList
+ *            要合并的字段集合
+ */
+function mergeCells(data,fieldName,colspan,target,fieldList){	
+// 声明一个map计算相同属性值在data对象出现的次数和
+var sortMap = {};
+for(var i = 0 ; i < data.length ; i++){
+    for(var prop in data[i]){
+    	//例如people.unit.name
+    	var fieldArr=fieldName.split(".");		        
+    	getCount(data[i],prop,fieldArr,0,sortMap);
+    }
+}	  
+var index = 0;    
+for(var prop in sortMap){
+    var count = sortMap[prop];
+    for(var i = 0 ; i < fieldList.length ; i++){
+    	$(target).bootstrapTable('mergeCells',{index:index, field:fieldList[i], colspan: colspan, rowspan: count});   
+	        }
+	        index += count;        
+	    }
+}
+
+
+/**
+ * 递归到最后一层 统计数据重复次数
+ * 比如例如people.unit.name 就一直取到name
+ * 类似于data["people"]["unit"]["name"]
+ */
+function getCount(data,prop,fieldArr,index,sortMap){	
+	if(index == fieldArr.length-1){			
+		if(prop == fieldArr[index]){
+            var key = data[prop];            
+            if(sortMap.hasOwnProperty(key)){
+                sortMap[key] = sortMap[key]+ 1;
+            } else {
+                sortMap[key] = 1;
+            } 
+	    }        
+		return;
+	}		
+    if(prop == fieldArr[index]){
+        var sdata = data[prop];	   
+        index=index+1;
+        getCount(sdata,fieldArr[index],fieldArr,index,sortMap);
+    } 
+    
+}
+
+
+</script>
+</body>
+</html>

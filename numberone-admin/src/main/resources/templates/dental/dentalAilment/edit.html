@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-dentalAilment-edit" th:object="${dentalAilment}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+            <input id="imgUrl" name="imgUrl"  th:field="*{imgUrl}" type="hidden">
+			<!-- <div class="form-group">	
+				<label class="col-sm-3 control-label">关联诊所id：</label>
+				<div class="col-sm-8">
+					<input id="clinicid" name="clinicid" th:field="*{clinicid}" class="form-control" type="text">
+				</div>
+			</div> -->
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预约诊疗时间 （分钟）：</label>
+				<div class="col-sm-8">
+					<!-- <input id="spendTime" name="spendTime" th:field="*{spendTime}" class="form-control" type="text"> -->
+					<input  type="text" class="time-input"  name="spendTime" id="spendTime" placeholder="" th:field="*{spendTime}"/>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">常见病名称：</label>
+				<div class="col-sm-8">
+					<input id="ailmentName" name="ailmentName" th:field="*{ailmentName}" class="form-control" type="text">
+				</div>
+			</div>
+			<!-- <div class="form-group">	
+				<label class="col-sm-3 control-label">照片路径：</label>
+				<div class="col-sm-8">
+					<input id="imgUrl" name="imgUrl" th:field="*{imgUrl}" class="form-control" type="text">
+				</div>
+			</div> -->
+			<!-- <div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="alimentSolution" name="alimentSolution" th:field="*{alimentSolution}" class="form-control" type="text">
+				</div>
+			</div> -->
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备用：</label>
+				<div class="col-sm-8">
+					<input id="spare" name="spare" th:field="*{spare}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remark" name="remark" th:field="*{remark}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+			<label class="col-sm-3 control-label">图片：</label>
+			<div class="col-sm-8">
+	                    <input id="file-1" name="filename" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1">
+				</div>
+	        </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <div th:include="include::fileupload"></div>
+    <script type="text/javascript">
+		
+    function dateFormat (date, format) {
+    date = new Date(date);
+    date.setHours(date.getHours()-14);
+    var o = {
+        'M+' : date.getMonth() + 1, //month
+        'd+' : date.getDate(), //day
+        'H+' : date.getHours(), //hour
+        'm+' : date.getMinutes(), //minute
+        's+' : date.getSeconds(), //second
+        'q+' : Math.floor((date.getMonth() + 3) / 3), //quarter
+        'S' : date.getMilliseconds() //millisecond
+    };
+
+    if (/(y+)/.test(format))
+        format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+
+    for (var k in o)
+        if (new RegExp('(' + k + ')').test(format))
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ('00' + o[k]).substr(('' + o[k]).length));
+
+    return format;
+}
+
+  //方法调用
+    var s_time = dateFormat($("#spendTime").val(),'yyyy-MM-dd HH:mm:ss');
+   $("#spendTime").val(s_time);
+
+		
+		
+		
+        var prefix = ctx + "dental/dentalAilment";
+		$("#form-dentalAilment-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			}
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-dentalAilment-edit').serialize());
+	        }
+	    }
+		
+		var msgFilesTooMany=[];
+		if($("#imgUrl").val()!=''&&$("#imgUrl").val()!=null){
+			msgFilesTooMany= ["<img src='"+$("#imgUrl").val()+"' class='file-preview-image' alt='肖像图片' title='肖像图片'>"] //预览图片的设置
+    	}
+		
+		 $("#file-1").fileinput({
+				showPreview:true,
+				language:'zh',
+				autoReplace:true,
+		        uploadUrl: ctx + 'dental/dentalDoctor/addPicture',
+		        enctype: 'multipart/form-data',
+		        allowedFileExtensions : ['jpg', 'png','gif'],
+		        overwriteInitial: false,
+		        maxFileSize: 1000,
+		        maxFileCount: 1,
+		        msgFilesTooMany: "选择上传的文件数量({n}) 超过允许的最大数值{m}！",
+		        initialPreview:msgFilesTooMany,	
+		        //initialpreviewconfig: [],　　// 默认预览的详细配置，回显时会用到
+		        initialPreviewConfig: [{  
+		               caption: 'desert.jpg',// 展示的图片名称  
+		               width: '120px',// 图片高度  
+		               url: ctx + 'dental/dentalDoctor/deletaPicture',// 预展示图片的删除调取路径  
+		               key: $("#imgUrl").val(),// 可修改 场景2中会用的  
+		               extra: {id: ''}, // 调用删除路径所传参数   
+		           }],  
+		        enctype: 'multipart/form-data',// 上传图片的设置  
+		        browseClass: "btn btn-primary", //按钮样式  
+		        allowedFileTypes: ['image'],
+		        slugCallback: function(filename) {
+		            return filename.replace('(', '_').replace(']', '_');
+		        }
+			}).on('fileuploaded', function (event, data, previewId, index) {
+			    // 上传成功几次就调用几次，把后端返回的地址附加到DOM结构上，为以后得操作做准备
+			    if (data.response.success == true) {
+			    	$("#imgUrl").val(data.response.filePath);
+			    } else {
+			        alert("上传失败，请重试！！！");
+			        $("#imgUrl").val('');
+			    }
+			}).on("fileclear",function(event, data, msg){	//点击右上角小×或者Remove删除前
+	                    $("#imgUrl").val('');
+			}).on("filecleared",function(event, data, msg){	//点击右上角小×或者Remove删除后
+				        $("#imgUrl").val('');
+			}).on('filepredelete', function(event, key, jqXHR, data) {	//原图片点击删除图标前
+				        $("#imgUrl").val('');
+			}).on('filedeleted', function(vKey, jqXHR, extraData){	//原图片点击删除图标后
+				        $("#imgUrl").val('');
+			}).on('filepreremove', function(event, id, index) {	//重新选择图片点击删除图标
+				        $("#imgUrl").val('');
+			}).on("filepreajax",function(previewId, index){	//点击Upload上传图片前
+				
+			}).on('fileuploaded', function (event, data, id, index) {//点击Upload上传图片后
+				
+			});
+	</script>
+</body>
+</html>
